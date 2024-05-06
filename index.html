@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base target="_top" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASTOE COLLEGE : COLLEGE OF LAHORE</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+  <!-- SweetAlert -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+  <style>
+    body {
+      background-color: #f8f9fa;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .container {
+      flex: 1;
+      margin-top: 50px;
+    }
+
+    h2 {
+      color: #004085;
+      margin-bottom: 30px;
+      font-size: 36px;
+      font-weight: bold;
+    }
+
+    input[type="text"] {
+      width: 300px;
+      padding: 10px 40px 10px 20px; /* Adjust padding for the icon */
+      border: 1px solid #ced4da;
+      border-radius: 5px;
+      position: relative;
+      font-size: 16px;
+    }
+
+    input[type="text"]::placeholder {
+      color: #6c757d;
+    }
+
+    .search-icon {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      right: 15px;
+      color: #6c757d;
+    }
+
+    input[type="button"] {
+      padding: 10px 20px;
+      background-color: #007bff;
+      border: none;
+      border-radius: 5px;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    input[type="button"]:hover {
+      background-color: #0056b3;
+    }
+
+    .logo {
+      margin-bottom: 20px;
+    }
+
+    footer {
+      background-color: #004085;
+      color: #ffffff;
+      padding: 20px 0;
+      margin-top: auto;
+      text-align: center;
+    }
+
+    footer p {
+      margin: 0;
+    }
+
+    /* Table Styles */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border-spacing: 0;
+    }
+
+    th, td {
+      border: 1px solid #dee2e6;
+      padding: 8px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <br>
+  <header class="text-center logo">
+      <img src="https://cdn.bio.link/uploads/profile_pictures/2023-04-16/LtkOkQHLljUSvYcfJpKC8NRFH1q3MfXZ.png" alt="University Logo" style="width: 200px;">
+  </header>
+
+  <div class="container">
+    <!-- Logo -->
+    <center>
+      <h2>ASTOE COLLEGE : COLLEGE OF LAHORE<br>(Examination May-June 2024)</h2>
+      </center>
+
+    <div class="text-center">
+      <!-- Search Input with Icon -->
+      <div style="position: relative;">
+        <input type="text" id="rollNumber" placeholder="ENTER UPC NUMBER">
+      </div>
+      <br>
+      <!-- Search Button -->
+      <input type="button" class="btn btn-primary" value="SEARCH" onclick="fetchData()">
+      <!-- Print Button -->
+      <input type="button" class="btn btn-secondary" value="PRINT RESULT" onclick="printResult()">
+      <!-- Excel Download Button -->
+
+
+
+    </div>
+
+    <!-- Result Section -->
+    <div id="result"></div>
+  </div>
+  <br>
+  <!-- Footer -->
+  <footer>
+    <p>© 2024 ASTOE COLLEGE : COLLEGE OF LAHORE. | DESIGNED BY MOHAMMAD RAMEEZ IMDAD <br> FOR APPSCRIPT PROJECTS : +923224083545</p>
+  </footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+
+  <script>
+    function fetchData() {
+      var rollNumber = document.querySelector('#rollNumber').value.trim();
+
+      if (rollNumber === '') {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Please enter Roll Number.',
+        });
+      } else {
+        google.script.run.withSuccessHandler((response) => {
+          if (response !== '') {
+            Swal.fire({
+              icon: 'success',
+              title: 'Success!',
+              text: 'Result found!',
+            });
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Result not found!',
+            });
+          }
+          document.getElementById('result').innerHTML = response;
+        }).fetchData(rollNumber);
+      }
+    }
+
+    function printResult() {
+      var resultDiv = document.getElementById('result');
+      var printWindow = window.open('', '_blank');
+      printWindow.document.open();
+      printWindow.document.write('<html><head><title>Print Result</title></head><body>');
+      printWindow.document.write('<table>');
+      printWindow.document.write(resultDiv.innerHTML);
+      printWindow.document.write('</table>');
+      printWindow.document.write('</body></html>');
+      printWindow.document.close();
+      printWindow.print();
+    }
+
+    
+  </script>
+</body>
+</html>
